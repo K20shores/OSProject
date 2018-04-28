@@ -20,4 +20,31 @@ extern "C" void kernel_main(void)
 {
     Terminal terminal;
     terminal.write_string("Hello, kernel World!\n");
+    terminal.write_string("This is a test sentence. This is a test sentence. This is a test sentence. This is a test sentence. This is a test sentence.\n");
+    terminal.write_string("a\n");
+    terminal.write_string("b\n");
+    terminal.write_string("c\n");
+    terminal.write_string("d\n");
+    terminal.write_string("e\n");
+    terminal.write_string("f\n");
+    terminal.write_string("g\n");
+    terminal.write_string("Hello, kernel World!1\n");
+    terminal.write_string("Hello, kernel World!2\n");
+    terminal.write_string("Hello, kernel World!3\n");
+    terminal.write_string("Hello, kernel World!4\n");
+    terminal.write_string("Hello, kernel World!5\n");
+    terminal.write_string("Hello, kernel World!6\n");
+    terminal.write_string("Hello, kernel World!7\n");
+    terminal.write_string("Hello, kernel World!8\n");
+    terminal.write_string("Hello, kernel World!9\n");
+    terminal.write_string("Hello, kernel World!10\n");
+    terminal.write_string("Hello, kernel World!11\n");
+    terminal.write_string("Hello, kernel World!12\n");
+    terminal.write_string("Hello, kernel World!13\n");
+    terminal.write_string("h\n");
+    terminal.write_string("i\n");
+    terminal.write_string("j\n");
+    terminal.write_string("Hello, kernel World!6\n");
+    terminal.write_string("Hello, kernel World!7\n");
+    terminal.write_string("Hello, kernel World!8\n");
 }

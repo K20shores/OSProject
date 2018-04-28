@@ -1,8 +1,8 @@
 #include "vga.h"
 
 VGA::VGA()
-    : _width(100)
-    , _height(100)
+    : _width(80)
+    , _height(25)
 {
 }
 

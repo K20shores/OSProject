@@ -6,6 +6,9 @@ CXXFLAGS=-g -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -ffreestanding
 KERNELFLAGS=-g -ffreestanding -O2 -nostdlib
 KERNELLIBS=-lgcc
 
+CRTBEGIN_OBJ:=$(shell $(CXX) $(CXXFLAGS) -print-file-name=crtbegin.o)
+CRTEND_OBJ:=$(shell $(CXX) $(CXXFLAGS) -print-file-name=crtend.o)
+
 all: myos.bin
 
 run: myos.bin
