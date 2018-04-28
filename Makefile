@@ -6,15 +6,22 @@ CXXFLAGS=-g -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -ffreestanding
 KERNELFLAGS=-g -ffreestanding -O2 -nostdlib
 KERNELLIBS=-lgcc
 
+CRTI_OBJ=crti.o
 CRTBEGIN_OBJ:=$(shell $(CXX) $(CXXFLAGS) -print-file-name=crtbegin.o)
 CRTEND_OBJ:=$(shell $(CXX) $(CXXFLAGS) -print-file-name=crtend.o)
+CRTN_OBJ=crtn.o
+
+OBJS=kernel.o boot.o terminal.o utils.o vga.o
+
+OBJ_LINK_LIST:=$(CRTI_OBJ) $(CRTBEGIN_OBJ) $(OBJS) $(CRTEND_OBJ) $(CRTN_OBJ)
+INTERNAL_OBJS:=$(CRTI_OBJ) $(OBJS) $(CRTN_OBJ)
 
 all: myos.bin
 
 run: myos.bin
 	qemu-system-i386 -cdrom myos.iso
 
-myos.bin: kernel.o boot.o terminal.o utils.o vga.o
+myos.bin: $(OBJS)
 	$(CXX) -T linker.ld $(KERNELFLAGS) $^ -o $@ $(KERNELLIBS)
 	~/opt/cross/i686-elf/bin/objcopy --only-keep-debug $@ kernel.sym
 	~/opt/cross/i686-elf/bin/objcopy --strip-debug $@
@@ -40,4 +47,4 @@ vga.o: vga.cpp
 	$(CXX) -c $(CXXFLAGS) $^ -o $@
 
 clean:
-	rm -rf *.o myos.iso boot.o myos.bin kernel.sym isodir
+	rm -rf $(INTERNAL_OBJS) myos.iso myos.bin kernel.sym isodir
