@@ -1,4 +1,5 @@
 
+OSNAME=DevOS
 CXX=i686-elf-g++
 AS=i686-elf-as
 
@@ -16,20 +17,20 @@ OBJS=kernel.o boot.o terminal.o utils.o vga.o
 OBJ_LINK_LIST:=$(CRTI_OBJ) $(CRTBEGIN_OBJ) $(OBJS) $(CRTEND_OBJ) $(CRTN_OBJ)
 INTERNAL_OBJS:=$(CRTI_OBJ) $(OBJS) $(CRTN_OBJ)
 
-all: myos.bin
+all: $(OSNAME).bin
 
-run: myos.bin
-	qemu-system-i386 -cdrom myos.iso
+run: $(OSNAME).bin
+	qemu-system-i386 -cdrom $(OSNAME).iso
 
-myos.bin: $(OBJS)
+$(OSNAME).bin: $(OBJS)
 	$(CXX) -T linker.ld $(KERNELFLAGS) $^ -o $@ $(KERNELLIBS)
 	~/opt/cross/i686-elf/bin/objcopy --only-keep-debug $@ kernel.sym
 	~/opt/cross/i686-elf/bin/objcopy --strip-debug $@
-	if grub-file --is-x86-multiboot myos.bin; then echo multiboot confirmed; else echo the file is not multiboot; fi
+	if grub-file --is-x86-multiboot $(OSNAME).bin; then echo multiboot confirmed; else echo the file is not multiboot; fi
 	mkdir -p isodir/boot/grub
 	cp $@ isodir/boot/$@
-	cp grub.cfg isodir/boot/grub/grub.cfg
-	grub-mkrescue -o myos.iso isodir
+	echo "menuentry \""$(OSNAME)"\"{ multiboot /boot/"$(OSNAME)".bin}" >> isodir/boot/grub/grub.cfg
+	grub-mkrescue -o $(OSNAME).iso isodir
 
 kernel.o: kernel.cpp
 	$(CXX) -c $(CXXFLAGS) $^ -o $@
@@ -47,4 +48,4 @@ vga.o: vga.cpp
 	$(CXX) -c $(CXXFLAGS) $^ -o $@
 
 clean:
-	rm -rf $(INTERNAL_OBJS) myos.iso myos.bin kernel.sym isodir
+	rm -rf $(INTERNAL_OBJS) $(OSNAME).iso $(OSNAME).bin kernel.sym isodir
