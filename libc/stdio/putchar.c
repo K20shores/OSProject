@@ -9,7 +9,7 @@ extern TTY tty;
 int putchar(int ic) {
 #if defined(__is_libk)
 	char c = (char) ic;
-    tty.write(&c, sizeof(c));
+    tty.write_char(&c, sizeof(c));
 #else
 	// TODO: Implement stdio and the write system call.
 #endif

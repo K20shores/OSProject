@@ -1,6 +1,6 @@
-DEFAULT_HOST!=../default-host.sh
+DEFAULT_HOST:=$(shell ../default-host.sh)
 HOST?=DEFAULT_HOST
-HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
+HOSTARCH:=$(shell ../target-triplet-to-arch.sh $(HOST))
 
 CFLAGS?=-O2 -g
 CPPFLAGS?=
@@ -63,13 +63,13 @@ libk.a: $(LIBK_OBJS)
 	$(AR) rcs $@ $(LIBK_OBJS)
 
 .c.o:
-	$(CXX) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
+	$(CXX) -MD -c $< -o $@ -std=c++14 $(CFLAGS) $(CPPFLAGS)
 
 .c.S:
 	$(CXX) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
 
 .c.libk.o:
-	$(CXX) -MD -c $< -o $@ -std=gnu11 $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
+	$(CXX) -MD -c $< -o $@ -std=c++14 $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
 
 .S.libk.o:
 	$(CXX) -MD -c $< -o $@ $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
@@ -83,7 +83,7 @@ install: install-headers install-libs
 
 install-headers:
 	mkdir -p $(DESTDIR)$(INCLUDEDIR)
-	cp -R --preserve=timestamps include/. $(DESTDIR)$(INCLUDEDIR)/.
+	cp -r include/. $(DESTDIR)$(INCLUDEDIR)/.
 
 install-libs: $(BINARIES)
 	mkdir -p $(DESTDIR)$(LIBDIR)

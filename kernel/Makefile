@@ -1,6 +1,6 @@
-DEFAULT_HOST!=../default-host.sh
+DEFAULT_HOST:=$(shell ../default-host.sh)
 HOST?=DEFAULT_HOST
-HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
+HOSTARCH:=$(shell ../target-triplet-to-arch.sh $(HOST))
 
 
 CFLAGS?=-O2 -g
@@ -61,7 +61,7 @@ $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
 	OBJ=`$(CXX) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
 
 .cpp.o:
-	$(CXX) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
+	$(CXX) -MD -c $< -o $@ -std=c++14 $(CFLAGS) $(CPPFLAGS)
 
 .S.o:
 	$(CXX) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
@@ -75,7 +75,7 @@ install: install-headers install-kernel
 
 install-headers:
 	mkdir -p $(DESTDIR)$(INCLUDEDIR)
-	cp -R --preserve=timestamps include/. $(DESTDIR)$(INCLUDEDIR)/.
+	cp -r include/. $(DESTDIR)$(INCLUDEDIR)/.
 
 install-kernel: myos.kernel
 	mkdir -p $(DESTDIR)$(BOOTDIR)

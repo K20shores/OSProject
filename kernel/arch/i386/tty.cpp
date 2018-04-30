@@ -4,7 +4,6 @@
 #include <string.h>
 
 #include <kernel/tty.h>
-#include <kernel/vga.h>
 
 TTY::TTY()
     : vga()
@@ -108,4 +107,9 @@ void TTY::write(const char* data, size_t size)
 void TTY::write_string(const char* data)
 {
     write(data, strlen(data));
+}
+
+void TTY::write_char(const char* data, size_t size)
+{
+    write(data, size);
 }

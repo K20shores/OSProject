@@ -1,4 +1,4 @@
-#include "vga.h"
+#include <kernel/vga.h>
 
 VGA::VGA()
     : _width(80)
