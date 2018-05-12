@@ -37,3 +37,6 @@ _start:
 1:	hlt
 	jmp 1b
 .size _start, . - _start
+
+# Setup GDT
+#include "gdt_low.S"

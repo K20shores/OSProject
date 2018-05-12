@@ -1,12 +1,19 @@
 #include <stdio.h>
 
 #include <kernel/tty.h>
+#include <kernel/gdt.h>
 
 TTY* kernel_tty;
 
 extern "C" void kernel_main(void) {
-    TTY tty;
+    /* kernel setup */
+    // initialize the GDT and TTY
+    TTY tty; 
+    GDT gdt; 
+
+    // make the tty available to put
     kernel_tty = &tty;
+
 	printf("Hello, kernel World!\n");
     printf("a\n");
     printf("b\n");

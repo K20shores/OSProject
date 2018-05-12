@@ -56,12 +56,13 @@ all: $(OSNAME).kernel
 $(OSNAME).kernel: $(OBJS) $(ARCHDIR)/linker.ld
 	$(CXX) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS) $(LINK_LIST)
 	grub-file --is-x86-multiboot $(OSNAME).kernel
+	i686-elf-objcopy --only-keep-debug $(OSNAME).kernel ../$(OSNAME).sym
+	i686-elf-objcopy --strip-debug $(OSNAME).kernel
 
 $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
 	OBJ=`$(CXX) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
 
 .cpp.o:
-	echo $<
 	$(CXX) -MD -c $< -o $@ -std=c++14 $(CFLAGS) $(CPPFLAGS)
 
 .S.o:
