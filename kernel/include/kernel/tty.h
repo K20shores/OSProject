@@ -15,6 +15,7 @@ class TTY
 
         void write_string(const char* data);
         void write_char(const char* data, size_t size);
+        void clear();
 
     private:
         /* Functions */
@@ -25,6 +26,7 @@ class TTY
         void write(const char* data, size_t size);
         void init_screen();
         void scroll_up();
+        void move_cursor();
 
     private:
         /* Data */

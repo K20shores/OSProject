@@ -1,7 +1,7 @@
 DEFAULT_HOST:=$(shell ../default-host.sh)
 HOST?=DEFAULT_HOST
 HOSTARCH:=$(shell ../target-triplet-to-arch.sh $(HOST))
-
+OSNAME=$(shell ../os-name.sh)
 
 CFLAGS?=-O2 -g
 CPPFLAGS?=
@@ -51,23 +51,24 @@ $(ARCHDIR)/crtn.o \
 .PHONY: all clean install install-headers install-kernel
 .SUFFIXES: .o .cpp .S .c
 
-all: myos.kernel
+all: $(OSNAME).kernel
 
-myos.kernel: $(OBJS) $(ARCHDIR)/linker.ld
+$(OSNAME).kernel: $(OBJS) $(ARCHDIR)/linker.ld
 	$(CXX) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS) $(LINK_LIST)
-	grub-file --is-x86-multiboot myos.kernel
+	grub-file --is-x86-multiboot $(OSNAME).kernel
 
 $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
 	OBJ=`$(CXX) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
 
 .cpp.o:
+	echo $<
 	$(CXX) -MD -c $< -o $@ -std=c++14 $(CFLAGS) $(CPPFLAGS)
 
 .S.o:
 	$(CXX) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
 
 clean:
-	rm -f myos.kernel
+	rm -f $(OSNAME).kernel
 	rm -f $(OBJS) *.o */*.o */*/*.o
 	rm -f $(OBJS:.o=.d) *.d */*.d */*/*.d
 
@@ -77,8 +78,8 @@ install-headers:
 	mkdir -p $(DESTDIR)$(INCLUDEDIR)
 	cp -r include/. $(DESTDIR)$(INCLUDEDIR)/.
 
-install-kernel: myos.kernel
+install-kernel: $(OSNAME).kernel
 	mkdir -p $(DESTDIR)$(BOOTDIR)
-	cp myos.kernel $(DESTDIR)$(BOOTDIR)
+	cp $(OSNAME).kernel $(DESTDIR)$(BOOTDIR)
 
 -include $(OBJS:.o=.d)

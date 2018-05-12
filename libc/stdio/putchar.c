@@ -4,12 +4,12 @@
 #include <kernel/tty.h>
 #endif
 
-extern TTY tty;
+extern TTY* kernel_tty;
 
 int putchar(int ic) {
 #if defined(__is_libk)
 	char c = (char) ic;
-    tty.write_char(&c, sizeof(c));
+    kernel_tty->write_char(&c, sizeof(c));
 #else
 	// TODO: Implement stdio and the write system call.
 #endif

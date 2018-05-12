@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include <kernel/tty.h>
+#include <kernel/utils.h>
 
 TTY::TTY()
     : vga()
@@ -39,6 +40,7 @@ void TTY::init_screen()
             buffer[index] = vga.entry(' ', color);
         }
     }
+    move_cursor();
 }
 
 void TTY::setcolor(uint8_t color)
@@ -96,12 +98,30 @@ void TTY::putchar(char c)
     }
 }
 
+void TTY::move_cursor()
+{
+    const size_t index = row * vga.width() + column;
+
+    /* This sends a command to indicies 14 and 15 in the
+    *  CRT Control Register of the VGA controller. These
+    *  are the high and low bytes of the index that show
+    *  where the hardware cursor is to be 'blinking'. To
+    *  learn more, you should look up some VGA specific
+    *  programming documents. A great start to graphics:
+    *  http://www.brackeen.com/home/vga */
+    outportb(0x3D4, 14);
+    outportb(0x3D5, index >> 8);
+    outportb(0x3D4, 15);
+    outportb(0x3D5, index);
+}
+
 void TTY::write(const char* data, size_t size)
 {
     for (size_t i = 0; i < size; ++i)
     {
         putchar(data[i]);
     }
+    move_cursor();
 }
 
 void TTY::write_string(const char* data)
@@ -112,4 +132,9 @@ void TTY::write_string(const char* data)
 void TTY::write_char(const char* data, size_t size)
 {
     write(data, size);
+}
+
+void TTY::clear()
+{
+    init_screen();
 }
