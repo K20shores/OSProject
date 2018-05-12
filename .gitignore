@@ -55,3 +55,5 @@ dkms.conf
 isodir
 kernel.sym
 sysroot
+.gdbinit
+DistributedOS.sym
