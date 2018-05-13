@@ -32,6 +32,7 @@ extern "C" void gdt_flush();
 
 GDT::GDT()
 {
+    printf("initializing GDT\n");
     init();
 }
 

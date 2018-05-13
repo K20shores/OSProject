@@ -8,12 +8,12 @@ class GDT
 {
     public:
         GDT();
-        void init();
 
     private:
         /* Setup a descriptor in the Global Descriptor Table */
         void gdt_set_gate(int num, unsigned long base, unsigned long limit, 
                 unsigned char access, unsigned char gran);
+        void init();
 
         static const int SIZE = 3;
 };

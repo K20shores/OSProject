@@ -40,3 +40,6 @@ _start:
 
 # Setup GDT
 #include "gdt_low.S"
+
+# Setup IDT
+#include "idt_low.S"
